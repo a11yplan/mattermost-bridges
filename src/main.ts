@@ -102,10 +102,21 @@ async function handleDiscordWebhook(request: Request, url: URL, env?: any): Prom
 }
 
 async function handleVercelWebhook(request: Request, url: URL, env?: any): Promise<Response> {
+  const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  const startTime = Date.now();
+  
+  console.log(`[${requestId}] Vercel webhook request started`);
+  console.log(`[${requestId}] Request URL: ${request.url}`);
+  console.log(`[${requestId}] Request headers:`, Object.fromEntries(request.headers.entries()));
+
   const mattermostUrl = getMattermostWebhookUrl(url, env);
   if (!mattermostUrl) {
+    console.error(`[${requestId}] Missing Mattermost webhook URL`);
     return new Response(
-      JSON.stringify({ error: 'Missing webhook URL parameter (?url=...) or MATTERMOST_WEBHOOK_URL environment variable' }),
+      JSON.stringify({ 
+        error: 'Missing webhook URL parameter (?url=...) or MATTERMOST_WEBHOOK_URL environment variable',
+        requestId 
+      }),
       { 
         status: 400, 
         headers: { 'Content-Type': 'application/json', ...corsHeaders } 
@@ -113,28 +124,78 @@ async function handleVercelWebhook(request: Request, url: URL, env?: any): Promi
     );
   }
 
+  console.log(`[${requestId}] Mattermost webhook URL configured: ${mattermostUrl.substring(0, 50)}...`);
+
   try {
-    const vercelPayload: VercelWebhookPayload = await request.json();
-    console.log('Received Vercel webhook payload:', JSON.stringify(vercelPayload, null, 2));
+    // Parse the request body
+    const rawBody = await request.text();
+    console.log(`[${requestId}] Raw request body (${rawBody.length} chars):`, rawBody);
+
+    let vercelPayload: VercelWebhookPayload;
+    try {
+      vercelPayload = JSON.parse(rawBody);
+    } catch (parseError) {
+      console.error(`[${requestId}] JSON parsing failed:`, parseError);
+      console.error(`[${requestId}] Raw body causing parse error:`, rawBody);
+      throw new Error(`Invalid JSON payload: ${parseError.message}`);
+    }
+
+    console.log(`[${requestId}] Parsed Vercel webhook payload:`, JSON.stringify(vercelPayload, null, 2));
+    console.log(`[${requestId}] Webhook event type: ${vercelPayload.type || 'unknown'}`);
+    console.log(`[${requestId}] Webhook event ID: ${vercelPayload.id || 'unknown'}`);
     
+    // Transform the payload
     const mattermostPayload = transformVercelToMattermost(vercelPayload);
-    console.log('Transformed Mattermost payload:', JSON.stringify(mattermostPayload, null, 2));
+    console.log(`[${requestId}] Transformed Mattermost payload:`, JSON.stringify(mattermostPayload, null, 2));
+    console.log(`[${requestId}] Message text length: ${mattermostPayload.text?.length || 0} chars`);
+    console.log(`[${requestId}] Attachments count: ${mattermostPayload.attachments?.length || 0}`);
     
+    // Send to Mattermost
+    console.log(`[${requestId}] Sending to Mattermost webhook...`);
     const result = await sendToMattermost(mattermostUrl, mattermostPayload);
     
+    const duration = Date.now() - startTime;
+    console.log(`[${requestId}] Request completed in ${duration}ms with status: ${result.status}`);
+    console.log(`[${requestId}] Result:`, result);
+    
     return new Response(
-      JSON.stringify(result),
+      JSON.stringify({ ...result, requestId, duration }),
       { 
         status: result.status, 
         headers: { 'Content-Type': 'application/json', ...corsHeaders } 
       }
     );
   } catch (error) {
-    console.error('Error processing Vercel webhook:', error);
+    const duration = Date.now() - startTime;
+    console.error(`[${requestId}] Error processing Vercel webhook after ${duration}ms:`, error);
+    console.error(`[${requestId}] Error stack:`, error.stack);
+    console.error(`[${requestId}] Error name:`, error.name);
+    console.error(`[${requestId}] Error message:`, error.message);
+    
+    // Try to send error notification to Mattermost if URL is available
+    if (mattermostUrl) {
+      try {
+        const errorPayload = {
+          text: `⚠️ **Vercel Webhook Error**\n\`\`\`\nRequest ID: ${requestId}\nError: ${error.message}\nDuration: ${duration}ms\n\`\`\``,
+          username: 'Vercel Bridge Error',
+          icon_url: 'https://assets.vercel.com/image/upload/v1588805858/repositories/vercel/logo.png'
+        };
+        await sendToMattermost(mattermostUrl, errorPayload);
+        console.log(`[${requestId}] Error notification sent to Mattermost`);
+      } catch (notificationError) {
+        console.error(`[${requestId}] Failed to send error notification:`, notificationError);
+      }
+    }
+    
     return new Response(
-      JSON.stringify({ error: 'Invalid Vercel webhook payload' }),
+      JSON.stringify({ 
+        error: 'Error processing Vercel webhook',
+        message: error.message,
+        requestId,
+        duration
+      }),
       { 
-        status: 400, 
+        status: 500, 
         headers: { 'Content-Type': 'application/json', ...corsHeaders } 
       }
     );

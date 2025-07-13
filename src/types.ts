@@ -78,61 +78,160 @@ export interface DiscordEmbed {
 
 // Vercel webhook types based on official API
 export interface VercelWebhookPayload {
-  type: string; // Event type like 'deployment.created', 'deployment.succeeded', etc.
+  type: VercelEventType;
   id: string;
   createdAt: number;
   region?: string;
-  payload: {
-    user?: {
-      id: string;
-      username?: string;
-      email?: string;
-    };
-    team?: {
-      id: string;
-      slug?: string;
-      name?: string;
-    };
-    project?: {
-      id: string;
-      name?: string;
-    };
-    deployment?: {
-      id: string;
-      url?: string;
-      name?: string;
-      meta?: {
-        githubCommitAuthorName?: string;
-        githubCommitAuthorEmail?: string;
-        githubCommitMessage?: string;
-        githubCommitOrg?: string;
-        githubCommitRef?: string;
-        githubCommitRepo?: string;
-        githubCommitSha?: string;
-        githubDeployment?: string;
-        githubOrg?: string;
-        githubRepo?: string;
-        githubRepoOwnerType?: string;
-        githubCommitRepoId?: string;
-        githubRepoId?: string;
-        githubRepoVisibility?: string;
-        githubHost?: string;
-        githubCommitAuthorLogin?: string;
-        branchAlias?: string;
-        action?: string;
-        originalDeploymentId?: string;
-      };
-      target?: string;
-      source?: string;
-    };
-    links?: {
-      deployment?: string;
-      project?: string;
-    };
-    plan?: string;
-    regions?: string[];
-    target?: string;
+  payload: VercelPayload;
+}
+
+export type VercelEventType = 
+  | 'deployment.created'
+  | 'deployment.succeeded' 
+  | 'deployment.error'
+  | 'deployment.canceled'
+  | 'deployment.ready'
+  | 'project.created'
+  | 'project.removed'
+  | 'domain.created'
+  | 'domain.certificate-add'
+  | 'domain.renewal'
+  | string; // Allow other event types
+
+export interface VercelPayload {
+  user?: VercelUser;
+  team?: VercelTeam;
+  project?: VercelProject;
+  deployment?: VercelDeployment;
+  domain?: VercelDomain;
+  links?: VercelLinks;
+  plan?: string;
+  regions?: string[];
+  target?: 'production' | 'preview' | string;
+}
+
+export interface VercelUser {
+  id: string;
+  username?: string;
+  email?: string;
+  name?: string;
+  avatar?: string;
+}
+
+export interface VercelTeam {
+  id: string;
+  slug?: string;
+  name?: string;
+  avatar?: string;
+}
+
+export interface VercelProject {
+  id: string;
+  name?: string;
+  accountId?: string;
+  autoExposeSystemEnvs?: boolean;
+  buildCommand?: string;
+  createdAt?: number;
+  devCommand?: string;
+  framework?: string;
+  gitRepository?: {
+    repo: string;
+    type: string;
   };
+  installCommand?: string;
+  outputDirectory?: string;
+  publicSource?: boolean;
+  rootDirectory?: string;
+  serverlessFunctionRegion?: string;
+  sourceFilesOutsideRootDirectory?: boolean;
+  updatedAt?: number;
+}
+
+export interface VercelDeployment {
+  id: string;
+  url?: string;
+  name?: string;
+  inspectorUrl?: string;
+  target?: 'production' | 'preview' | string;
+  source?: 'git' | 'cli' | 'import' | string;
+  state?: 'BUILDING' | 'ERROR' | 'INITIALIZING' | 'QUEUED' | 'READY' | 'CANCELED';
+  type?: 'LAMBDAS' | 'STATIC';
+  creator?: VercelUser;
+  createdAt?: number;
+  buildingAt?: number;
+  ready?: number;
+  meta?: VercelDeploymentMeta;
+  regions?: string[];
+  functions?: Record<string, any>;
+  routes?: any[];
+  env?: string[];
+  build?: {
+    env?: string[];
+  };
+  monorepoManager?: string;
+  ownerId?: string;
+  projectId?: string;
+  readyState?: 'BUILDING' | 'ERROR' | 'INITIALIZING' | 'QUEUED' | 'READY' | 'CANCELED';
+  readySubstate?: 'STAGED' | 'PROMOTED';
+  version?: number;
+}
+
+export interface VercelDeploymentMeta {
+  githubCommitAuthorName?: string;
+  githubCommitAuthorEmail?: string;
+  githubCommitMessage?: string;
+  githubCommitOrg?: string;
+  githubCommitRef?: string;
+  githubCommitRepo?: string;
+  githubCommitSha?: string;
+  githubDeployment?: string;
+  githubOrg?: string;
+  githubRepo?: string;
+  githubRepoOwnerType?: string;
+  githubCommitRepoId?: string;
+  githubRepoId?: string;
+  githubRepoVisibility?: string;
+  githubHost?: string;
+  githubCommitAuthorLogin?: string;
+  branchAlias?: string;
+  action?: string;
+  originalDeploymentId?: string;
+  gitlabCommitAuthorName?: string;
+  gitlabCommitAuthorEmail?: string;
+  gitlabCommitMessage?: string;
+  gitlabCommitRef?: string;
+  gitlabCommitSha?: string;
+  gitlabDeployment?: string;
+  gitlabProjectId?: string;
+  gitlabProjectName?: string;
+  gitlabProjectNamespace?: string;
+  gitlabProjectPath?: string;
+  gitlabCommitAuthorLogin?: string;
+  bitbucketCommitAuthorName?: string;
+  bitbucketCommitMessage?: string;
+  bitbucketCommitRef?: string;
+  bitbucketCommitSha?: string;
+  bitbucketDeployment?: string;
+  bitbucketRepo?: string;
+  bitbucketRepoOwner?: string;
+  bitbucketCommitAuthorLogin?: string;
+}
+
+export interface VercelDomain {
+  id: string;
+  name: string;
+  serviceType: string;
+  nsVerifiedAt?: number;
+  txtVerifiedAt?: number;
+  cdnEnabled?: boolean;
+  createdAt?: number;
+  verificationRecord?: string;
+}
+
+export interface VercelLinks {
+  deployment?: string;
+  project?: string;
+  domain?: string;
 }
 
 // Bridge configuration
