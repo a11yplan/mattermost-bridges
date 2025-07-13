@@ -211,3 +211,5 @@ deno run --allow-net test_vercel.ts
 ## License
 
 MIT License - see LICENSE file for details.
+
+<!-- Deploy trigger: 2025-07-13 -->
