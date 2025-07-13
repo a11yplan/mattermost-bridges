@@ -76,58 +76,63 @@ export interface DiscordEmbed {
   }[];
 }
 
-// Vercel webhook types
+// Vercel webhook types based on official API
 export interface VercelWebhookPayload {
-  user: {
-    id: string;
-  };
-  team: {
-    id: string;
-  };
-  project: {
-    id: string;
-    name?: string;
-  };
-  deployment: {
-    id: string;
-    customEnvironmentId?: string | null;
-    meta: {
-      githubCommitAuthorName?: string;
-      githubCommitAuthorEmail?: string;
-      githubCommitMessage?: string;
-      githubCommitOrg?: string;
-      githubCommitRef?: string;
-      githubCommitRepo?: string;
-      githubCommitSha?: string;
-      githubDeployment?: string;
-      githubOrg?: string;
-      githubRepo?: string;
-      githubRepoOwnerType?: string;
-      githubCommitRepoId?: string;
-      githubRepoId?: string;
-      githubRepoVisibility?: string;
-      githubHost?: string;
-      githubCommitAuthorLogin?: string;
-      branchAlias?: string;
-      action?: string;
-      originalDeploymentId?: string;
+  type: string; // Event type like 'deployment.created', 'deployment.succeeded', etc.
+  id: string;
+  createdAt: number;
+  region?: string;
+  payload: {
+    user?: {
+      id: string;
+      username?: string;
+      email?: string;
     };
-    name: string;
-    url: string;
-    inspectorUrl: string;
+    team?: {
+      id: string;
+      slug?: string;
+      name?: string;
+    };
+    project?: {
+      id: string;
+      name?: string;
+    };
+    deployment?: {
+      id: string;
+      url?: string;
+      name?: string;
+      meta?: {
+        githubCommitAuthorName?: string;
+        githubCommitAuthorEmail?: string;
+        githubCommitMessage?: string;
+        githubCommitOrg?: string;
+        githubCommitRef?: string;
+        githubCommitRepo?: string;
+        githubCommitSha?: string;
+        githubDeployment?: string;
+        githubOrg?: string;
+        githubRepo?: string;
+        githubRepoOwnerType?: string;
+        githubCommitRepoId?: string;
+        githubRepoId?: string;
+        githubRepoVisibility?: string;
+        githubHost?: string;
+        githubCommitAuthorLogin?: string;
+        branchAlias?: string;
+        action?: string;
+        originalDeploymentId?: string;
+      };
+      target?: string;
+      source?: string;
+    };
+    links?: {
+      deployment?: string;
+      project?: string;
+    };
+    plan?: string;
+    regions?: string[];
     target?: string;
-    errorMessage?: string;
   };
-  links: {
-    deployment: string;
-    project: string;
-  };
-  name: string;
-  plan: string;
-  regions: string[];
-  target: string;
-  type: string;
-  url: string;
 }
 
 // Bridge configuration
