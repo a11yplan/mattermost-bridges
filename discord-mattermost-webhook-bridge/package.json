@@ -1,0 +1,19 @@
+{
+  "name": "discord-mattermost-webhook-bridge",
+  "version": "1.0.0",
+  "description": "Bridge to convert Discord webhook payloads to Mattermost webhook format",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun --watch src/index.ts",
+    "deploy": "wrangler deploy",
+    "dev:worker": "wrangler dev"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "bun-types": "latest",
+    "typescript": "^5.8.3",
+    "wrangler": "^3.114.8"
+  }
+}

@@ -1,0 +1,13 @@
+name = "discord-mattermost-webhook-bridge"
+main = "src/worker.ts"
+compatibility_date = "2023-05-21"
+
+# Optionally configure environment variables
+[vars]
+LOG_LEVEL = "info"
+LOG_PAYLOADS = "false"
+REQUEST_TIMEOUT = "10000"
+
+# Local development settings
+[dev]
+port = 8787

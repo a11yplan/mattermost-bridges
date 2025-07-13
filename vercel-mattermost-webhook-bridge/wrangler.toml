@@ -1,0 +1,9 @@
+name = "vercel-mattermost-webhook-bridge"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[env.production]
+vars = { }
+
+# Add your Mattermost webhook URL as a secret:
+# wrangler secret put MATTERMOST_WEBHOOK_URL

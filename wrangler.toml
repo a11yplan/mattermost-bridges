@@ -1,0 +1,20 @@
+name = "mattermost-bridges"
+compatibility_date = "2024-03-01"
+main = "src/main.ts"
+
+[env.production]
+name = "mattermost-bridges-prod"
+
+[env.staging]
+name = "mattermost-bridges-staging"
+
+# Environment variables (set via wrangler secret put)
+# MATTERMOST_WEBHOOK_URL = "your-default-webhook-url-here"
+
+# Custom domain configuration (optional)
+# [[env.production.routes]]
+# pattern = "bridges.yourdomain.com/*"
+
+# Rate limiting (optional)
+# [limits]
+# cpu_time = 50

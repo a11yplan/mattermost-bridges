@@ -1,0 +1,18 @@
+{
+  "name": "vercel-mattermost-webhook-bridge",
+  "version": "1.0.0",
+  "description": "Bridge between Vercel webhooks and Mattermost notifications",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "node test/test-webhook.js"
+  },
+  "keywords": ["vercel", "mattermost", "webhook", "cloudflare-workers"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

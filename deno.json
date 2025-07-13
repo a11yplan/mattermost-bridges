@@ -1,0 +1,15 @@
+{
+  "imports": {
+    "@std/http": "jsr:@std/http@^1.0.0",
+    "@std/url": "jsr:@std/url@^0.225.0",
+    "@std/encoding": "jsr:@std/encoding@^1.0.0"
+  },
+  "tasks": {
+    "dev": "deno run --allow-net --allow-env --watch src/main.ts",
+    "deploy": "deno run --allow-net --allow-env --allow-read src/deploy.ts"
+  },
+  "compilerOptions": {
+    "strict": true,
+    "lib": ["deno.window"]
+  }
+}
