@@ -1,0 +1,137 @@
+{
+  "simple_message": {
+    "content": "Hello from Discord!",
+    "username": "TestBot"
+  },
+  "message_with_avatar": {
+    "content": "Message with custom avatar",
+    "username": "AvatarBot",
+    "avatar_url": "https://example.com/avatar.png"
+  },
+  "rich_embed": {
+    "content": "Check out this comprehensive embed!",
+    "username": "RichBot",
+    "embeds": [
+      {
+        "title": "🎮 Game Update v2.1.0",
+        "description": "**New features and improvements!**\n\n• Added new characters\n• Fixed performance issues\n• Updated graphics engine",
+        "url": "https://example.com/game-update",
+        "color": 3447003,
+        "timestamp": "2024-01-15T10:30:00.000Z",
+        "footer": {
+          "text": "Game Studio • v2.1.0",
+          "icon_url": "https://example.com/game-icon.png"
+        },
+        "image": {
+          "url": "https://example.com/update-banner.png"
+        },
+        "thumbnail": {
+          "url": "https://example.com/game-logo.png"
+        },
+        "author": {
+          "name": "Development Team",
+          "url": "https://example.com/dev-team",
+          "icon_url": "https://example.com/dev-icon.png"
+        },
+        "fields": [
+          {
+            "name": "🎯 New Characters",
+            "value": "• Warrior Class\n• Mage Class\n• Archer Class",
+            "inline": true
+          },
+          {
+            "name": "🐛 Bug Fixes",
+            "value": "• Memory leaks\n• Crash on startup\n• Audio glitches",
+            "inline": true
+          },
+          {
+            "name": "📊 Performance",
+            "value": "• 30% faster loading\n• Reduced memory usage\n• Better FPS stability",
+            "inline": true
+          },
+          {
+            "name": "🔧 Technical Details",
+            "value": "This update includes major engine improvements and new rendering pipeline for better visual quality.",
+            "inline": false
+          }
+        ]
+      }
+    ]
+  },
+  "multiple_embeds": {
+    "content": "Server status report:",
+    "username": "StatusBot",
+    "embeds": [
+      {
+        "title": "🟢 Web Server",
+        "description": "All systems operational",
+        "color": 65280,
+        "fields": [
+          {"name": "Uptime", "value": "99.9%", "inline": true},
+          {"name": "Response Time", "value": "125ms", "inline": true}
+        ]
+      },
+      {
+        "title": "🟡 Database",
+        "description": "Minor performance issues",
+        "color": 16776960,
+        "fields": [
+          {"name": "Uptime", "value": "98.5%", "inline": true},
+          {"name": "Query Time", "value": "250ms", "inline": true}
+        ]
+      },
+      {
+        "title": "🔴 CDN",
+        "description": "Experiencing outages",
+        "color": 16711680,
+        "fields": [
+          {"name": "Uptime", "value": "85.2%", "inline": true},
+          {"name": "Affected Regions", "value": "EU, APAC", "inline": true}
+        ]
+      }
+    ]
+  },
+  "timestamp_formats": {
+    "content": "Time examples:\n• Short time: <t:1640995200:t>\n• Long time: <t:1640995200:T>\n• Short date: <t:1640995200:d>\n• Long date: <t:1640995200:D>\n• Short date/time: <t:1640995200:f>\n• Long date/time: <t:1640995200:F>\n• Relative: <t:1640995200:R>",
+    "username": "TimeBot"
+  },
+  "emoji_heavy": {
+    "content": "Emoji test: 🎉 🚀 🎯 ⚡ 🛡️ ⚔️ 🏆 `🎮` **🔥** *⭐*",
+    "username": "EmojiBot",
+    "embeds": [
+      {
+        "title": "🎮 Gaming Achievements 🏆",
+        "description": "Player `🎯 marksman99` achieved **🏆 legendary** status!",
+        "color": 15844367,
+        "fields": [
+          {"name": "⚔️ Combat Rating", "value": "🔥 2,450", "inline": true},
+          {"name": "🛡️ Defense", "value": "⭐ 1,850", "inline": true},
+          {"name": "🎯 Accuracy", "value": "💯 95%", "inline": true}
+        ]
+      }
+    ]
+  },
+  "error_simulation": {
+    "content": "⚠️ **System Alert** ⚠️",
+    "username": "AlertBot",
+    "embeds": [
+      {
+        "title": "🚨 Critical Error Detected",
+        "description": "Database connection failed at <t:1704067200:F>",
+        "color": 16711680,
+        "fields": [
+          {"name": "Error Code", "value": "`DB_CONNECTION_TIMEOUT`", "inline": true},
+          {"name": "Affected Services", "value": "• User Authentication\n• Data Sync\n• Reporting", "inline": true},
+          {"name": "Estimated Fix Time", "value": "<t:1704070800:R>", "inline": true}
+        ],
+        "footer": {
+          "text": "Incident ID: INC-2024-001"
+        }
+      }
+    ]
+  },
+  "minimal": {
+    "content": "Minimal Discord message"
+  },
+  "empty": {}
+}

@@ -1,0 +1,164 @@
+{
+  "official_deployment_created": {
+    "type": "deployment.created",
+    "id": "evt_test_created_001",
+    "createdAt": 1704067200000,
+    "payload": {
+      "user": {
+        "id": "user_abc123",
+        "username": "developer"
+      },
+      "team": {
+        "id": "team_xyz789",
+        "name": "Development Team"
+      },
+      "project": {
+        "id": "prj_awesome_app",
+        "name": "awesome-app"
+      },
+      "deployment": {
+        "id": "dpl_created_001",
+        "url": "awesome-app-git-main.vercel.app",
+        "target": "production",
+        "meta": {
+          "githubCommitMessage": "Add new landing page with improved UX",
+          "githubCommitAuthorLogin": "developer",
+          "githubCommitSha": "a1b2c3d4e5f6789012345678901234567890abcd",
+          "githubCommitRef": "main",
+          "githubRepo": "awesome-app",
+          "githubOrg": "my-company"
+        }
+      },
+      "links": {
+        "deployment": "https://vercel.com/my-company/awesome-app/deployments/dpl_created_001",
+        "project": "https://vercel.com/my-company/awesome-app"
+      }
+    }
+  },
+  "official_deployment_succeeded": {
+    "type": "deployment.succeeded",
+    "id": "evt_test_success_002",
+    "createdAt": 1704067800000,
+    "payload": {
+      "project": {
+        "id": "prj_awesome_app",
+        "name": "awesome-app"
+      },
+      "deployment": {
+        "id": "dpl_success_002",
+        "url": "awesome-app-abc123.vercel.app",
+        "target": "production"
+      },
+      "links": {
+        "deployment": "https://vercel.com/deployments/dpl_success_002",
+        "project": "https://vercel.com/projects/awesome-app"
+      }
+    }
+  },
+  "official_deployment_error": {
+    "type": "deployment.error",
+    "id": "evt_test_error_003",
+    "createdAt": 1704068400000,
+    "payload": {
+      "project": {
+        "id": "prj_broken_app",
+        "name": "broken-build-app"
+      },
+      "deployment": {
+        "id": "dpl_error_003",
+        "target": "production",
+        "meta": {
+          "githubCommitMessage": "Refactor authentication system",
+          "githubCommitAuthorLogin": "backend-dev",
+          "githubCommitSha": "badcommit123456789abcdef0123456789abcdef01"
+        }
+      },
+      "links": {
+        "deployment": "https://vercel.com/deployments/dpl_error_003"
+      }
+    }
+  },
+  "legacy_format_sample": {
+    "user": {
+      "id": "a8jPbQUK4PmErjxIlrtvvIRB"
+    },
+    "team": {
+      "id": "team_EXnb8RdCXjFBUFNDXqdMh5yh"
+    },
+    "project": {
+      "id": "prj_WGKECis2jp4TLKMpZTXyEcNBux4T",
+      "name": "darkhedgeio"
+    },
+    "deployment": {
+      "id": "dpl_2prfWiWh7v8sX1V6YKBt22zydxQG",
+      "customEnvironmentId": null,
+      "meta": {
+        "githubCommitAuthorName": "mrvnklm",
+        "githubCommitAuthorEmail": "24477241+mrvnklm@users.noreply.github.com",
+        "githubCommitMessage": "bump",
+        "githubCommitOrg": "a11yplan",
+        "githubCommitRef": "main",
+        "githubCommitRepo": "darkhedgeio",
+        "githubCommitSha": "5c54a91795358ed8e4e9f70d0656b64117e960b8",
+        "githubDeployment": "1",
+        "githubOrg": "a11yplan",
+        "githubRepo": "darkhedgeio",
+        "githubRepoOwnerType": "Organization",
+        "githubCommitRepoId": "1001500868",
+        "githubRepoId": "1001500868",
+        "githubRepoVisibility": "private",
+        "githubHost": "github.com",
+        "githubCommitAuthorLogin": "mrvnklm",
+        "branchAlias": "darkhedgeio-git-main-a11yplan.vercel.app",
+        "action": "redeploy",
+        "originalDeploymentId": "dpl_3bvdNVGny8Ery4B6aFouPHNPrzmk"
+      },
+      "name": "darkhedgeio",
+      "url": "darkhedgeio-axe7zpf1j-a11yplan.vercel.app",
+      "inspectorUrl": "https://vercel.com/a11yplan/darkhedgeio/2prfWiWh7v8sX1V6YKBt22zydxQG"
+    },
+    "links": {
+      "deployment": "https://vercel.com/a11yplan/darkhedgeio/2prfWiWh7v8sX1V6YKBt22zydxQG",
+      "project": "https://vercel.com/a11yplan/darkhedgeio"
+    },
+    "name": "darkhedgeio",
+    "plan": "pro",
+    "regions": ["iad1"],
+    "target": "production",
+    "type": "LAMBDAS",
+    "url": "darkhedgeio-axe7zpf1j-a11yplan.vercel.app"
+  },
+  "preview_deployment": {
+    "type": "deployment.succeeded",
+    "id": "evt_preview_001",
+    "createdAt": 1704069000000,
+    "payload": {
+      "project": {
+        "id": "prj_feature_branch",
+        "name": "feature-testing"
+      },
+      "deployment": {
+        "id": "dpl_preview_001",
+        "url": "feature-testing-git-feature-branch.vercel.app",
+        "target": "preview",
+        "meta": {
+          "githubCommitMessage": "WIP: new user dashboard",
+          "githubCommitAuthorLogin": "frontend-dev",
+          "githubCommitRef": "feature/dashboard-redesign"
+        }
+      }
+    }
+  },
+  "minimal_official": {
+    "type": "deployment.created",
+    "id": "evt_minimal",
+    "createdAt": 1704069600000,
+    "payload": {}
+  },
+  "minimal_legacy": {
+    "deployment": {
+      "id": "dpl_minimal_legacy"
+    }
+  },
+  "empty": {}
+}
