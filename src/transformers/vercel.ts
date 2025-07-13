@@ -1,4 +1,4 @@
-import type { VercelWebhookPayload, MattermostWebhookPayload, MattermostAttachment } from '../types.ts';
+import type { VercelWebhookPayload, MattermostWebhookPayload, MattermostAttachment } from '../types';
 
 export function transformVercelToMattermost(payload: VercelWebhookPayload): MattermostWebhookPayload {
   const { deployment, project, links } = payload;

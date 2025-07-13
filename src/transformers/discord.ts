@@ -1,4 +1,4 @@
-import type { DiscordWebhookPayload, MattermostWebhookPayload, DiscordEmbed, MattermostAttachment } from '../types.ts';
+import type { DiscordWebhookPayload, MattermostWebhookPayload, DiscordEmbed, MattermostAttachment } from '../types';
 
 // Convert Discord color (decimal) to Mattermost color (hex)
 const formatColor = (color?: number): string | undefined => {

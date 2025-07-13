@@ -1,7 +1,6 @@
-import { serve } from "@std/http/server";
-import { transformDiscordToMattermost } from './transformers/discord.ts';
-import { transformVercelToMattermost } from './transformers/vercel.ts';
-import type { DiscordWebhookPayload, VercelWebhookPayload, BridgeResponse } from './types.ts';
+import { transformDiscordToMattermost } from './transformers/discord';
+import { transformVercelToMattermost } from './transformers/vercel';
+import type { DiscordWebhookPayload, VercelWebhookPayload, BridgeResponse } from './types';
 
 // CORS headers for browser requests
 const corsHeaders = {
@@ -22,10 +21,10 @@ function handleCors(request: Request): Response | null {
 }
 
 // Extract Mattermost webhook URL from query params or environment
-function getMattermostWebhookUrl(url: URL): string | null {
+function getMattermostWebhookUrl(url: URL, env?: any): string | null {
   return url.searchParams.get('url') || 
          url.searchParams.get('webhook_url') || 
-         Deno.env.get('MATTERMOST_WEBHOOK_URL') || 
+         (env && env.MATTERMOST_WEBHOOK_URL) ||
          null;
 }
 
@@ -66,8 +65,8 @@ async function sendToMattermost(webhookUrl: string, payload: object): Promise<Br
 }
 
 // Route handlers
-async function handleDiscordWebhook(request: Request, url: URL): Promise<Response> {
-  const mattermostUrl = getMattermostWebhookUrl(url);
+async function handleDiscordWebhook(request: Request, url: URL, env?: any): Promise<Response> {
+  const mattermostUrl = getMattermostWebhookUrl(url, env);
   if (!mattermostUrl) {
     return new Response(
       JSON.stringify({ error: 'Missing webhook URL parameter (?url=...) or MATTERMOST_WEBHOOK_URL environment variable' }),
@@ -102,8 +101,8 @@ async function handleDiscordWebhook(request: Request, url: URL): Promise<Respons
   }
 }
 
-async function handleVercelWebhook(request: Request, url: URL): Promise<Response> {
-  const mattermostUrl = getMattermostWebhookUrl(url);
+async function handleVercelWebhook(request: Request, url: URL, env?: any): Promise<Response> {
+  const mattermostUrl = getMattermostWebhookUrl(url, env);
   if (!mattermostUrl) {
     return new Response(
       JSON.stringify({ error: 'Missing webhook URL parameter (?url=...) or MATTERMOST_WEBHOOK_URL environment variable' }),
@@ -167,7 +166,7 @@ function handleNotFound(): Response {
 }
 
 // Main request handler
-async function handleRequest(request: Request): Promise<Response> {
+async function handleRequest(request: Request, env?: any): Promise<Response> {
   // Handle CORS preflight
   const corsResponse = handleCors(request);
   if (corsResponse) return corsResponse;
@@ -189,10 +188,10 @@ async function handleRequest(request: Request): Promise<Response> {
   // Route requests
   switch (path) {
     case '/discord':
-      return handleDiscordWebhook(request, url);
+      return handleDiscordWebhook(request, url, env);
     
     case '/vercel':
-      return handleVercelWebhook(request, url);
+      return handleVercelWebhook(request, url, env);
     
     case '/health':
     case '/':
@@ -203,22 +202,9 @@ async function handleRequest(request: Request): Promise<Response> {
   }
 }
 
-// Start the server
-if (import.meta.main) {
-  const port = parseInt(Deno.env.get('PORT') ?? '8000');
-  
-  console.log(`🚀 Mattermost Bridge Server starting on port ${port}`);
-  console.log(`📡 Available endpoints:`);
-  console.log(`   POST /discord?url=<mattermost_webhook_url>`);
-  console.log(`   POST /vercel?url=<mattermost_webhook_url>`);
-  console.log(`   GET  /health`);
-  
-  serve(handleRequest, { port });
-}
-
 // Export for Cloudflare Workers
 export default {
-  async fetch(request: Request): Promise<Response> {
-    return handleRequest(request);
+  async fetch(request: Request, env?: any): Promise<Response> {
+    return handleRequest(request, env);
   }
 };
