@@ -115,7 +115,11 @@ async function handleVercelWebhook(request: Request, url: URL, env?: any): Promi
 
   try {
     const vercelPayload: VercelWebhookPayload = await request.json();
+    console.log('Received Vercel webhook payload:', JSON.stringify(vercelPayload, null, 2));
+    
     const mattermostPayload = transformVercelToMattermost(vercelPayload);
+    console.log('Transformed Mattermost payload:', JSON.stringify(mattermostPayload, null, 2));
+    
     const result = await sendToMattermost(mattermostUrl, mattermostPayload);
     
     return new Response(

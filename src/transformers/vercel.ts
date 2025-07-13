@@ -207,7 +207,39 @@ export function transformVercelToMattermost(webhook: VercelWebhookPayload | any)
   attachment.footer = 'Vercel';
   attachment.footer_icon = 'https://assets.vercel.com/image/upload/v1588805858/repositories/vercel/logo.png';
   
+  // Create a simple text version as fallback - ensure we ALWAYS have some text
+  let simpleText = `${title || 'Vercel Event'}`;
+  
+  if (project?.name) {
+    simpleText += ` for ${project.name}`;
+  }
+  
+  if (environment) {
+    simpleText += ` (${environment})`;
+  }
+  
+  if (deployment?.url && (type === 'deployment.succeeded' || type === 'deployment.ready')) {
+    simpleText += `\nLive URL: https://${deployment.url}`;
+  }
+  
+  if (meta?.githubCommitMessage) {
+    const message = meta.githubCommitMessage.length > 50 
+      ? meta.githubCommitMessage.substring(0, 50) + '...'
+      : meta.githubCommitMessage;
+    simpleText += `\nCommit: ${message}`;
+  }
+  
+  if (meta?.githubCommitAuthorLogin) {
+    simpleText += `\nAuthor: ${meta.githubCommitAuthorLogin}`;
+  }
+  
+  // Ensure we always have SOME text, even if everything fails
+  if (!simpleText || simpleText.trim() === '') {
+    simpleText = `Vercel deployment event: ${type || 'unknown'}`;
+  }
+
   return {
+    text: simpleText,
     username: 'Vercel',
     icon_url: 'https://assets.vercel.com/image/upload/v1588805858/repositories/vercel/logo.png',
     attachments: [attachment]
