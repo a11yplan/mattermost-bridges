@@ -7,19 +7,19 @@ export function transformVercelToMattermost(payload: VercelWebhookPayload): Matt
   // Determine deployment status based on the payload
   let status = 'deployment';
   let color = '#0070f3';
-  let emoji = '🚀';
+  let emoji = ':rocket:';
   let title = 'Deployment Started';
   
   // Infer status from payload structure and data
   if (deployment.errorMessage) {
     status = 'error';
     color = '#e00';
-    emoji = '❌';
+    emoji = ':x:';
     title = 'Deployment Failed';
   } else if (deployment.url && payload.target === 'production') {
     status = 'ready';
     color = '#0f9549';
-    emoji = '✅';
+    emoji = ':white_check_mark:';
     title = 'Deployment Ready';
   }
   
@@ -34,7 +34,7 @@ export function transformVercelToMattermost(payload: VercelWebhookPayload): Matt
   // Add project information
   if (project?.name) {
     attachment.fields!.push({
-      title: '📁 Project',
+      title: ':file_folder: Project',
       value: project.name,
       short: true
     });
@@ -42,7 +42,7 @@ export function transformVercelToMattermost(payload: VercelWebhookPayload): Matt
   
   // Add environment
   attachment.fields!.push({
-    title: '🌍 Environment',
+    title: ':earth_americas: Environment',
     value: deployment?.target || payload.target || 'production',
     short: true
   });
@@ -50,7 +50,7 @@ export function transformVercelToMattermost(payload: VercelWebhookPayload): Matt
   // Add URL if deployment is ready
   if (status === 'ready' && deployment.url) {
     attachment.fields!.push({
-      title: '🌐 Live URL',
+      title: ':globe_with_meridians: Live URL',
       value: `[${deployment.url}](https://${deployment.url})`,
       short: false
     });
@@ -59,7 +59,7 @@ export function transformVercelToMattermost(payload: VercelWebhookPayload): Matt
   // Add branch information
   if (meta.githubCommitRef) {
     attachment.fields!.push({
-      title: '🌿 Branch',
+      title: ':herb: Branch',
       value: meta.githubCommitRef,
       short: true
     });
@@ -68,7 +68,7 @@ export function transformVercelToMattermost(payload: VercelWebhookPayload): Matt
   // Add author information
   if (meta.githubCommitAuthorLogin) {
     attachment.fields!.push({
-      title: '👤 Author',
+      title: ':bust_in_silhouette: Author',
       value: meta.githubCommitAuthorLogin,
       short: true
     });
@@ -77,7 +77,7 @@ export function transformVercelToMattermost(payload: VercelWebhookPayload): Matt
   // Add commit information
   if (meta.githubCommitSha) {
     attachment.fields!.push({
-      title: '🔖 Commit',
+      title: ':bookmark: Commit',
       value: `\`${meta.githubCommitSha.substring(0, 7)}\``,
       short: true
     });
@@ -89,7 +89,7 @@ export function transformVercelToMattermost(payload: VercelWebhookPayload): Matt
       ? meta.githubCommitMessage.substring(0, 100) + '...'
       : meta.githubCommitMessage;
     attachment.fields!.push({
-      title: '💬 Message',
+      title: ':speech_balloon: Message',
       value: message,
       short: false
     });
@@ -98,7 +98,7 @@ export function transformVercelToMattermost(payload: VercelWebhookPayload): Matt
   // Add error message if deployment failed
   if (deployment.errorMessage) {
     attachment.fields!.push({
-      title: '⚠️ Error',
+      title: ':warning: Error',
       value: deployment.errorMessage,
       short: false
     });
@@ -110,7 +110,7 @@ export function transformVercelToMattermost(payload: VercelWebhookPayload): Matt
   if (status === 'ready' && deployment.url) {
     attachment.actions.push({
       type: 'button',
-      text: '🚀 Visit Site',
+      text: ':rocket: Visit Site',
       url: `https://${deployment.url}`,
       style: 'primary'
     });
@@ -119,7 +119,7 @@ export function transformVercelToMattermost(payload: VercelWebhookPayload): Matt
   if (deployment?.inspectorUrl) {
     attachment.actions.push({
       type: 'button',
-      text: status === 'error' ? '🔍 View Error Details' : '📊 View Details',
+      text: status === 'error' ? ':mag: View Error Details' : ':bar_chart: View Details',
       url: deployment.inspectorUrl,
       style: status === 'error' ? 'danger' : undefined
     });
@@ -128,13 +128,14 @@ export function transformVercelToMattermost(payload: VercelWebhookPayload): Matt
   if (links?.project) {
     attachment.actions.push({
       type: 'button',
-      text: '📊 Project Dashboard',
+      text: ':bar_chart: Project Dashboard',
       url: links.project
     });
   }
   
-  // Add footer with timestamp
-  attachment.footer = `Vercel | ${new Date().toISOString()}`;
+  // Add footer with formatted timestamp
+  const now = new Date();
+  attachment.footer = `Vercel | ${now.toLocaleString()}`;
   attachment.footer_icon = 'https://assets.vercel.com/image/upload/v1588805858/repositories/vercel/logo.png';
   
   return {
